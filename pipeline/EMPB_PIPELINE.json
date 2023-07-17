@@ -1,0 +1,17 @@
+{
+	"name": "EMPB_PIPELINE",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait_EMPBPIPELINE",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"annotations": []
+	}
+}
