@@ -1,0 +1,60 @@
+{
+	"name": "AlterRow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "altrow_input",
+						"type": "DatasetReference"
+					},
+					"name": "ALTROWINPUT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "altrow_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          NAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> ALTROWINPUT",
+				"ALTROWINPUT alterRow(insertIf(ID==3),",
+				"     updateIf(ID==1||ID==4),",
+				"     deleteIf(ID==5),",
+				"     upsertIf(ID==6)) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          NAME as string",
+				"     ),",
+				"     deletable:true,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:true,",
+				"     keys:['ID'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

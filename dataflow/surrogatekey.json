@@ -1,0 +1,86 @@
+{
+	"name": "surrogatekey",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "employee",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "employee",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "sort2"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string,",
+				"          HIRE_DATE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 keyGenerate(output({S.NO} as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1 sort(asc(FIRST_NAME, true)) ~> sort1",
+				"select1 sort(asc({S.NO}, true)) ~> sort2",
+				"sort1 select(mapColumn(",
+				"          DEPARTMENT_ID,",
+				"          EMPLOYEE_ID,",
+				"          FIRST_NAME,",
+				"          LAST_NAME,",
+				"          SALARY,",
+				"          LOCATION_ID,",
+				"          HIRE_DATE,",
+				"          {S.NO}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"sort2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string,",
+				"          HIRE_DATE as string",
+				"     ),",
+				"     partitionFileNames:['surrogatekey.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

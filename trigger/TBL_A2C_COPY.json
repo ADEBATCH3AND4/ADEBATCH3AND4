@@ -1,0 +1,28 @@
+{
+	"name": "TBL_A2C_COPY",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "COPY_sql2sqL_Dynamic",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"tbl_Input": "TBL_A",
+					"tbl_output": "TBL_C"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2023-07-05T03:21:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

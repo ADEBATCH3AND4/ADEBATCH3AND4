@@ -1,0 +1,35 @@
+{
+	"name": "Dynamic_Sql_Table_input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"db_TableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NAME",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().db_TableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

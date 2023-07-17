@@ -1,0 +1,50 @@
+{
+	"name": "FAIL_ACTVITY",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "This Got failed due to XYZ REASON",
+					"errorCode": "123"
+				}
+			}
+		],
+		"variables": {
+			"File_List": {
+				"type": "Array"
+			},
+			"InsertVariable": {
+				"type": "String"
+			},
+			"AppendVariable": {
+				"type": "Array"
+			},
+			"FileList": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-13T03:29:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

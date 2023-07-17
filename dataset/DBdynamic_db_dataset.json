@@ -1,0 +1,34 @@
+{
+	"name": "DBdynamic_db_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_PARAMETER",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"dbName": {
+					"value": "@dataset().dbName",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"dbName": {
+				"type": "string"
+			},
+			"tblName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().tblName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

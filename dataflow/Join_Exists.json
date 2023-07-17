@@ -1,0 +1,96 @@
+{
+	"name": "Join_Exists",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "employee",
+						"type": "DatasetReference"
+					},
+					"name": "EMP"
+				},
+				{
+					"dataset": {
+						"referenceName": "department",
+						"type": "DatasetReference"
+					},
+					"name": "DEPT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "empoutput",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "empoutput",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "exists1"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "lookup1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string,",
+				"          HIRE_DATE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> EMP",
+				"source(output(",
+				"          DEPARTMENT_ID as string,",
+				"          DEPARTMENT_NAME as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DEPT",
+				"EMP, DEPT exists(EMP@DEPARTMENT_ID == DEPT@DEPARTMENT_ID,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> exists1",
+				"EMP, DEPT join(EMP@DEPARTMENT_ID == DEPT@DEPARTMENT_ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'both')~> join1",
+				"EMP, DEPT lookup(EMP@DEPARTMENT_ID == DEPT@DEPARTMENT_ID,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['join.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1",
+				"exists1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['exists.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2"
+			]
+		}
+	}
+}

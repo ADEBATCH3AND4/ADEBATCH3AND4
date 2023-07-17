@@ -1,0 +1,59 @@
+{
+	"name": "UNPIVOT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "unpivot",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "unpivot",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "unpivot1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DEPARTMENT as string,",
+				"          MALE as short,",
+				"          FEMALE as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 unpivot(output(",
+				"          GENDER as string,",
+				"          COUNT as short",
+				"     ),",
+				"     ungroupBy(DEPARTMENT),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot1",
+				"unpivot1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          DEPT as string,",
+				"          LOCATION as string,",
+				"          SALARY as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,104 @@
+{
+	"name": "COPY_sql2sql_server_db_datasetdynamic",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sqlinput_dynamic_Server_DB_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"serverName": {
+								"value": "@pipeline().parameters.sourceServerName",
+								"type": "Expression"
+							},
+							"dbName": {
+								"value": "@pipeline().parameters.sourceDBName",
+								"type": "Expression"
+							},
+							"tblName": {
+								"value": "@pipeline().parameters.sourceTblName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "sqlinput_dynamic_Server_DB_dataset",
+						"type": "DatasetReference",
+						"parameters": {
+							"serverName": {
+								"value": "@pipeline().parameters.destServerName",
+								"type": "Expression"
+							},
+							"dbName": {
+								"value": "@pipeline().parameters.destDBName",
+								"type": "Expression"
+							},
+							"tblName": {
+								"value": "@pipeline().parameters.destTblName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"sourceServerName": {
+				"type": "string"
+			},
+			"destServerName": {
+				"type": "string"
+			},
+			"sourceDBName": {
+				"type": "string"
+			},
+			"destDBName": {
+				"type": "string"
+			},
+			"sourceTblName": {
+				"type": "string"
+			},
+			"destTblName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-06T02:26:44Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

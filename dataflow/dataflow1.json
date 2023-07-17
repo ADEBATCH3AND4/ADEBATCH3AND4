@@ -1,0 +1,64 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Lookup1",
+						"type": "DatasetReference"
+					},
+					"name": "lookup1"
+				},
+				{
+					"dataset": {
+						"referenceName": "Lookup2",
+						"type": "DatasetReference"
+					},
+					"name": "lookup2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "empoutput",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "lookup3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Empid as integer,",
+				"          Name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> lookup1",
+				"source(output(",
+				"          Empid as integer,",
+				"          Name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> lookup2",
+				"lookup1, lookup2 lookup(lookup1@Empid == lookup2@Empid,",
+				"     multiple: false,",
+				"     pickup: 'last',",
+				"     asc(lookup2@Empid, true),",
+				"     asc(lookup2@Name, true),",
+				"     broadcast: 'auto')~> lookup3",
+				"lookup3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

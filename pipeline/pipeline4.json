@@ -1,0 +1,43 @@
+{
+	"name": "pipeline4",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.Input",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"Input": {
+				"type": "array",
+				"defaultValue": [
+					"Cus1.csv",
+					"Cus2.cv"
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-11T03:16:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

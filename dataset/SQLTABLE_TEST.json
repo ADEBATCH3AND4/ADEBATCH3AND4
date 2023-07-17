@@ -1,0 +1,23 @@
+{
+	"name": "SQLTABLE_TEST",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "TEST"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

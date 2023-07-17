@@ -1,0 +1,50 @@
+{
+	"name": "empformat",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "format.csv",
+				"folderPath": "input",
+				"container": "employee"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Salary1",
+				"type": "String"
+			},
+			{
+				"name": "Salary2",
+				"type": "String"
+			},
+			{
+				"name": "Salary3",
+				"type": "String"
+			},
+			{
+				"name": "Date1",
+				"type": "String"
+			},
+			{
+				"name": "Date2",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

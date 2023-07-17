@@ -1,0 +1,38 @@
+{
+	"name": "LOOKUP_GETTABLEINFO",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Dynamic_Sql_Table_input",
+						"type": "DatasetReference",
+						"parameters": {
+							"db_TableName": "EMP_SAL"
+						}
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-07-07T03:06:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

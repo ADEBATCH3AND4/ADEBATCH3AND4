@@ -1,0 +1,85 @@
+{
+	"name": "PIVOT",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "pivot",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "pivot",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "pivot",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "pivot1"
+				},
+				{
+					"name": "pivot2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          DEPT as string,",
+				"          LOCATION as string,",
+				"          SALARY as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 pivot(groupBy(DEPT),",
+				"     pivotBy(LOCATION),",
+				"     {} = count(EMPLOYEE_ID),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1",
+				"source1 pivot(groupBy(LOCATION),",
+				"     pivotBy(DEPT),",
+				"     {} = sum(SALARY),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot2",
+				"pivot2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          DEPT as string,",
+				"          LOCATION as string,",
+				"          SALARY as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"pivot1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          DEPT as string,",
+				"          LOCATION as string,",
+				"          SALARY as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
+			]
+		}
+	}
+}

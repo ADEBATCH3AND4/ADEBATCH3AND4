@@ -1,0 +1,67 @@
+{
+	"name": "New branch",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "emp_loc_sal",
+						"type": "DatasetReference"
+					},
+					"name": "MAINsource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "empoutput",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "agginput"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          employee_id as string,",
+				"          first_name as string,",
+				"          last_name as string,",
+				"          salary as integer,",
+				"          manager_id as string,",
+				"          department_name as string,",
+				"          city as string,",
+				"          state_province as string,",
+				"          country_id as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> MAINsource",
+				"MAINsource aggregate(groupBy(department_name),",
+				"     Dept_Sal = sum(salary)) ~> agginput",
+				"MAINsource, agginput join(MAINsource@department_name == agginput@department_name,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 derive({Percentage of Salary} = round((salary/Dept_Sal)*100,0)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['percentalloc.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

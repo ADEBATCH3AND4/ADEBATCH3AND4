@@ -1,0 +1,32 @@
+{
+	"name": "Rank_input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Rank",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Rank_Excel.xlsx",
+				"folderPath": "input",
+				"container": "rank"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "NAME",
+				"type": "String"
+			},
+			{
+				"name": "SALARY",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

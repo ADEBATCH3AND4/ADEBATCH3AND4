@@ -1,0 +1,57 @@
+{
+	"name": "dataflow3",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "emp_loc_sal",
+						"type": "DatasetReference"
+					},
+					"name": "EMPINPUT"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "get_meta_folderinput",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          employee_id as integer,",
+				"          first_name as string,",
+				"          last_name as string,",
+				"          salary as integer,",
+				"          manager_id as string,",
+				"          department_name as string,",
+				"          city as string,",
+				"          state_province as string,",
+				"          country_id as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> EMPINPUT",
+				"EMPINPUT sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as string,",
+				"          DEPARTMENT_ID as string,",
+				"          LOCATION_ID as string,",
+				"          HIRE_DATE as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

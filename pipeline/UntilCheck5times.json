@@ -1,0 +1,204 @@
+{
+	"name": "UntilCheck5times",
+	"properties": {
+		"activities": [
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@or(\r\n    greaterOrEquals(int(variables('iterationCount')),5),\r\n    activity('Get Metadata1').output.exists\r\n    )",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Get Metadata1",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "until5timesinput",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@pipeline().parameters.FileName",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"exists"
+								],
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							}
+						},
+						{
+							"name": "IterationCount",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "iterationCount",
+								"value": {
+									"value": "@variables('TempCount')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "TempCount",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "IterationCount",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "TempCount",
+								"value": {
+									"value": "@string(add(int(variables('iterationCount')),1))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [
+								{
+									"activity": "TempCount",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 15
+							}
+						},
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Get Metadata1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "until5timesinput",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": {
+											"value": "@pipeline().parameters.FileName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "untilactivityoutput",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					],
+					"timeout": "0.12:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"FileName": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"TempCount": {
+				"type": "String",
+				"defaultValue": "0"
+			},
+			"iterationCount": {
+				"type": "String",
+				"defaultValue": "0"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-12T03:13:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
