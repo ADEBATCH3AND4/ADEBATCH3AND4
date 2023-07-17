@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "df-anandjul23-2"
 		},
+		"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
+			"type": "string",
+			"defaultValue": "TBL_A"
+		},
+		"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output": {
+			"type": "string",
+			"defaultValue": "TBL_C"
+		},
 		"TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
 			"type": "string",
 			"defaultValue": "TBL_D"
@@ -20,6 +28,37 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/TBL_A2C_COPY')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "COPY_sql2sqL_Dynamic",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"tbl_Input": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input')]",
+							"tbl_output": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 15,
+						"startTime": "2023-07-05T03:21:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/TBL_D2A_copy')]",
 			"type": "Microsoft.DataFactory/factories/triggers",

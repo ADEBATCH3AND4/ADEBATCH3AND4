@@ -183,12 +183,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
-						"value": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input')]"
-					},
-					"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output": {
-						"value": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output')]"
 					}
 				}
 			},
@@ -209,6 +203,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
+						"value": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input')]"
+					},
+					"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output": {
+						"value": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output')]"
 					},
 					"TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
 						"value": "[parameters('TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input')]"
