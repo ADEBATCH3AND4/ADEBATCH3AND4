@@ -1,0 +1,226 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "df-anandjul23-2"
+		},
+		"LS_ANANDDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_ANANDDB'"
+		},
+		"LS_BLOB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_BLOB'"
+		},
+		"LS_DYNAMICDB AND TABLE_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_DYNAMICDB AND TABLE'"
+		},
+		"LS_DYNAMICDBANDTBLNAME_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_DYNAMICDBANDTBLNAME'"
+		},
+		"LS_PARAMALL_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_PARAMALL'"
+		},
+		"LS_PARAMETER_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_PARAMETER'"
+		},
+		"LS_SQL_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQL'"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-jun23.vault.azure.net/"
+		},
+		"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
+			"type": "string",
+			"defaultValue": "TBL_A"
+		},
+		"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output": {
+			"type": "string",
+			"defaultValue": "TBL_C"
+		},
+		"TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
+			"type": "string",
+			"defaultValue": "TBL_D"
+		},
+		"TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output": {
+			"type": "string",
+			"defaultValue": "TBL_A"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "df-anandjul23-2_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_ANANDDB_connectionString": {
+						"value": "[parameters('LS_ANANDDB_connectionString')]"
+					},
+					"LS_BLOB_connectionString": {
+						"value": "[parameters('LS_BLOB_connectionString')]"
+					},
+					"LS_DYNAMICDB AND TABLE_connectionString": {
+						"value": "[parameters('LS_DYNAMICDB AND TABLE_connectionString')]"
+					},
+					"LS_DYNAMICDBANDTBLNAME_connectionString": {
+						"value": "[parameters('LS_DYNAMICDBANDTBLNAME_connectionString')]"
+					},
+					"LS_PARAMALL_connectionString": {
+						"value": "[parameters('LS_PARAMALL_connectionString')]"
+					},
+					"LS_PARAMETER_connectionString": {
+						"value": "[parameters('LS_PARAMETER_connectionString')]"
+					},
+					"LS_SQL_connectionString": {
+						"value": "[parameters('LS_SQL_connectionString')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "df-anandjul23-2_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-anandjul23-2_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "df-anandjul23-2_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-anandjul23-2_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "df-anandjul23-2_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-anandjul23-2_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "df-anandjul23-2_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
+						"value": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input')]"
+					},
+					"TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output": {
+						"value": "[parameters('TBL_A2C_COPY_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-anandjul23-2_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "df-anandjul23-2_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input": {
+						"value": "[parameters('TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_Input')]"
+					},
+					"TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output": {
+						"value": "[parameters('TBL_D2A_copy_properties_COPY_sql2sqL_Dynamic_parameters_tbl_output')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'df-anandjul23-2_ArmTemplate_4')]"
+			]
+		}
+	]
+}
